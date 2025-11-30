@@ -98,9 +98,13 @@ def load_models():
     cgan = CGAN_Generator().to(device)
     cdcgan = cDCGAN_Generator(d=128).to(device)
     
-    cgan_path = os.path.join("..", "models", "generator_param.pkl")
-    cdcgan_path = os.path.join("..", "models", "MNIST_cDCGAN_generator_param.pkl")
-    
+    cgan_path = "models/generator_param.pkl"                    # ← removed "../"
+    cdcgan_path = "models/MNIST_cDCGAN_generator_param.pkl"
+
+    if not os.path.exists(cgan_path):
+        st.error(f"cGAN model not found at {cgan_path}")
+    if not os.path.exists(cdcgan_path):
+        st.error(f"cDCGAN model not found at {cdcgan_path}")
     cgan.load_state_dict(torch.load(cgan_path, map_location=device))
     cdcgan.load_state_dict(torch.load(cdcgan_path, map_location=device))
     
