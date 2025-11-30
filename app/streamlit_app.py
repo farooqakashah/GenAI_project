@@ -152,7 +152,7 @@ def generate_single_digit(model, digit, is_cdcgan):
     return (img * 255).astype(np.uint8)
 
 def combine_digits(digits_imgs):
-    imgs = [Image.fromarray(d) for d in digits_imgs]   # ← Convert each to PIL
+    imgs = [Image.fromarray(np.uint8(d)) for d in digits_imgs]# ← Convert each to PIL
     w, h = 28, 28
     total_w = len(imgs) * w + (len(imgs)-1) * 25
     combined = Image.new("L", (total_w, h), 255)       # ← Create PIL canvas
@@ -182,18 +182,18 @@ if generate_btn:
         st.markdown(f"<h2 style='text-align:center;color:#1E88E5;'>Your Handwritten Number: <b>{number}</b></h2>", unsafe_allow_html=True)
         
         cols = st.columns(min(n_vars, 4))
-        for idx, img in enumerate(results):
+        for idx, combined_pil_image in enumerate(results):
             with cols[idx % 4]:
-                st.image(img, use_container_width=True)
+                st.image(combined_pil_image, use_column_width=True)  # ← Now it's definitely PIL!
                 st.caption(f"Variation {idx+1}")
 
-        # Download
+        # Download button
         buf = io.BytesIO()
         results[0].save(buf, format="PNG")
         st.download_button(
             label="Download Image as PNG",
             data=buf.getvalue(),
-            file_name=f"handwritten_{number}_{model_key}_{datetime.now().strftime('%Y%m%d_%H%M')}.png",
+            file_name=f"handwritten_{number}_{model_key}.png",
             mime="image/png",
             use_container_width=True
         )
