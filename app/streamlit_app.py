@@ -152,15 +152,15 @@ def generate_single_digit(model, digit, is_cdcgan):
     return (img * 255).astype(np.uint8)
 
 def combine_digits(digits_imgs):
-    imgs = [Image.fromarray(d) for d in digits_imgs]
+    imgs = [Image.fromarray(d) for d in digits_imgs]   # ← Convert each to PIL
     w, h = 28, 28
     total_w = len(imgs) * w + (len(imgs)-1) * 25
-    combined = Image.new("L", (total_w, h), 255)
+    combined = Image.new("L", (total_w, h), 255)       # ← Create PIL canvas
     x = 0
     for img in imgs:
         combined.paste(img, (x, 0))
         x += w + 25
-    return combined
+    return combined  # ← Returns PIL Image, not numpy!
 
 # ==================== MAIN GENERATION ====================
 if generate_btn:
