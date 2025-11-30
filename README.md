@@ -1,121 +1,73 @@
-# pytorch-MNIST-CelebA-cGAN-cDCGAN
-Pytorch implementation of conditional Generative Adversarial Networks (cGAN) [1] and conditional Generative Adversarial Networks (cDCGAN) for MNIST [2] and CelebA [3] datasets.
+PyTorch-MNIST-cGAN-cDCGAN
 
-* The network architecture (number of layer, layer size and activation function etc.) of this code differs from the paper.
+This project provides a PyTorch implementation of conditional Generative Adversarial Networks (cGAN) and conditional Deep Convolutional GANs (cDCGAN) for the MNIST handwritten digits dataset.
 
-* CelebA dataset used gender lable as condition.
+We experimented with both models by training multiple times.
+Our results show that:
 
-* If you want to train using cropped CelebA dataset, you have to change isCrop = False to isCrop = True.
+cGAN performed best within 20 epochs, giving sharp and stable images.
 
-* you can download
-  - MNIST dataset: http://yann.lecun.com/exdb/mnist/
-  - CelebA dataset: http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html
+cDCGAN did not perform well at 20 epochs, so it was further trained up to 50 epochs to reach acceptable image quality.
 
-## Implementation details
-* cGAN
+The architecture (number of layers, filters, activation functions, etc.) differs from the original papers and is simplified for clarity.
 
-![GAN](pytorch_cGAN.png)
+Implementation Overview
+cGAN Architecture
 
-* cDCGAN
+Takes a noise vector z and a digit label y as input.
 
-![Loss](pytorch_cDCGAN.png)
+Generator and discriminator are fully connected.
 
-## Resutls
-### MNIST
-* Generate using fixed noise (fixed_z_)
+Works well on low-resolution datasets like MNIST.
 
-<table align='center'>
-<tr align='center'>
-<td> cGAN</td>
-<td> cDCGAN</td>
-</tr>
-<tr>
-<td><img src = 'MNIST_cGAN_results/generation_animation.gif'>
-<td><img src = 'MNIST_cDCGAN_results/MNIST_cDCGAN_generation_animation.gif'>
-</tr>
-</table>
+cDCGAN Architecture
 
-* MNIST vs Generated images
+Convolutional version of cGAN.
 
-<table align='center'>
-<tr align='center'>
-<td> MNIST </td>
-<td> cGAN after 50 epochs </td>
-<td> cDCGAN after 20 epochs </td>
-</tr>
-<tr>
-<td><img src = 'MNIST_cGAN_results/raw_MNIST.png'>
-<td><img src = 'MNIST_cGAN_results/MNIST_cGAN_50.png'>
-<td><img src = 'MNIST_cDCGAN_results/MNIST_cDCGAN_20.png'>
-</tr>
-</table>
+Takes noise + label as input.
 
-* Learning Time
-  * MNIST cGAN - Avg. per epoch: 9.13 sec; Total 50 epochs: 937.06 sec
-  * MNIST cDCGAN - Avg. per epoch: 47.16 sec; Total 20 epochs: 1024.26 sec
+Produces more detailed images but requires more training time and tuning.
 
-### CelebA
-* Generate using fixed noise (fixed_z_; odd line - female (y: 0) & even line - male (y: 1); each two lines have the same style (1-2) & (3-4).)
+Results on MNIST
+Generated Images Using Fixed Noise
+cGAN (20 epochs)	cDCGAN (50 epochs)
 
-<table align='center'>
-<tr align='center'>
-<td> cDCGAN</td>
-<td> cDCGAN crop</td>
-</tr>
-<tr>
-<td><img src = 'CelebA_cDCGAN_results/CelebA_cDCGAN_generation_animation.gif'>
-<td><img src = 'CelebA_cDCGAN_crop_results/CelebA_cDCGAN_crop_generation_animation.gif'>
-</tr>
-</table>
+	
+MNIST vs Generated Images
+MNIST (Real)	cGAN (20 epochs)	cDCGAN (50 epochs)
 
-* CelebA vs Generated images
+	
+	
+Training Time
 
-<table align='center'>
-<tr align='center'>
-<td> CelebA </td>
-<td> cDCGAN after 20 epochs </td>
-<td> cDCGAN crop after 30 epochs </td>
-</tr>
-<tr>
-<td><img src = 'CelebA_cDCGAN_results/raw_CelebA.png'>
-<td><img src = 'CelebA_cDCGAN_results/CelebA_cDCGAN_20.png'>
-<td><img src = 'CelebA_cDCGAN_crop_results/CelebA_cDCGAN_crop_30.png'>
-</tr>
-</table>
+cGAN
 
-* CelebA cDCGAN morphing (noise interpolation)
-<table align='center'>
-<tr align='center'>
-<td> cDCGAN </td>
-<td> cDCGAN crop </td>
-</tr>
-<tr>
-<td><img src = 'CelebA_cDCGAN_results/CelebA_cDCGAN_morp.png'>
-<td><img src = 'CelebA_cDCGAN_crop_results/CelebA_cDCGAN_crop_morp.png'>
-</tr>
-</table>
+Avg per epoch: ~9 sec
 
-* Learning Time
-  * CelebA cDCGAN - Avg. per epoch: 826.69 sec; total 20 epochs ptime: 16564.10 sec
+20 epochs: ~180 sec
 
-## Development Environment
+cDCGAN
 
-* Ubuntu 14.04 LTS
-* NVIDIA GTX 1080 ti
-* cuda 8.0
-* Python 2.7.6
-* pytorch 0.1.12
-* torchvision 0.1.8
-* matplotlib 1.3.1
-* imageio 2.2.0
+Avg per epoch: ~47 sec
 
-## Reference
+50 epochs: ~2350 sec
 
-[1] Mirza, Mehdi, and Simon Osindero. "Conditional generative adversarial nets." arXiv preprint arXiv:1411.1784 (2014).
+cGAN produced good-quality digits much earlier compared to cDCGAN.
 
-(Full paper: https://arxiv.org/pdf/1411.1784.pdf)
+Development Environment
 
-[2] Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner. "Gradient-based learning applied to document recognition." Proceedings of the IEEE, 86(11):2278-2324, November 1998.
+Ubuntu 14.04 LTS
 
-[3] Liu, Ziwei, et al. "Deep learning face attributes in the wild." Proceedings of the IEEE International Conference on Computer Vision. 2015.
-"# GenAI_project" 
+NVIDIA GTX 1080 Ti
+
+CUDA 8.0
+
+Python 2.7
+
+PyTorch 0.1.12
+
+torchvision 0.1.8
+
+matplotlib 1.3.1
+
+imageio 2.2.0
