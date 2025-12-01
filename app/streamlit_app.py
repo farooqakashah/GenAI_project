@@ -98,7 +98,7 @@ def load_models():
     cgan = CGAN_Generator().to(device)
     cdcgan = cDCGAN_Generator(d=128).to(device)
     
-    cgan_path = "models/generator_param.pkl"                    # ← removed "../"
+    cgan_path = "models/generator_param2.0.pkl"                    # ← removed "../"
     cdcgan_path = "models/MNIST_cDCGAN_generator_param.pkl"
 
     if not os.path.exists(cgan_path):
